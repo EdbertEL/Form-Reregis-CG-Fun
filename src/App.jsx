@@ -62,7 +62,7 @@ const App = () => {
     <div
       className="min-h-screen flex items-center justify-center p-3 sm:p-4 relative overflow-hidden"
       style={{
-        backgroundImage: `linear-gradient(rgba(17, 24, 39, 0.85), rgba(6, 78, 128, 0.85)), url('/src/assets/foto.jpg')`,
+        backgroundImage: `linear-gradient(rgba(17, 24, 39, 0.85), rgba(6, 78, 128, 0.85)), url('/foto.jpg')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
