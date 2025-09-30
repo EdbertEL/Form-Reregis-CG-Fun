@@ -188,7 +188,7 @@ const App = () => {
     flex items-center gap-2 pixel-border pixel-text 
     ${
       currentQuestion === 0
-        ? "bg-gray-800/50 text-gray-500 cursor-not-allowed"
+        ? "bg-gray-800/50 text-gray-200 cursor-not-allowed"
         : "bg-cyan-900/50 text-cyan-300 hover:bg-cyan-800/50 transform hover:scale-105 shadow-lg pixel-glow"
     }`}
               >
@@ -202,8 +202,8 @@ const App = () => {
     flex items-center gap-2 pixel-border pixel-text 
     ${
       !canProceed
-        ? "bg-gray-800/50 text-gray-500 cursor-not-allowed"
-        : "bg-gradient-to-r from-cyan-500 to-blue-600 text-black hover:from-cyan-600 hover:to-blue-700 transform hover:scale-105 shadow-2xl pixel-glow"
+        ? "bg-gray-800/50 text-gray-200 cursor-not-allowed"
+        : "bg-gradient-to-r from-cyan-500 to-blue-600 text-gray-700 hover:from-cyan-600 hover:to-blue-700 transform hover:scale-105 shadow-2xl pixel-glow"
     }`}
               >
                 {currentQuestion === visibleQuestions.length - 1
