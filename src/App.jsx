@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useEffect, useState, useRef } from "react";
+import { ChevronLeft, ChevronRight, Volume2, VolumeX } from "lucide-react";
 import questionsConfig from "./component/GameForm/questionsConfig";
 import GameCharacter from "./component/GameForm/GameCharacter";
 import ThinkingCloud from "./component/GameForm/ThinkingCloud";
@@ -23,6 +23,10 @@ const App = () => {
   const [isComplete, setIsComplete] = useState(false);
   const [visibleQuestions, setVisibleQuestions] = useState([]);
 
+  const [isMuted, setIsMuted] = useState(false);
+  const [audioStarted, setAudioStarted] = useState(false); // ✅ fix: tambahkan state ini
+  const audioRef = useRef(null);
+
   // Filter pertanyaan dengan conditional
   useEffect(() => {
     const filtered = questionsConfig.filter((q) => {
@@ -32,6 +36,28 @@ const App = () => {
     });
     setVisibleQuestions(filtered);
   }, [answers]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.1; // atur volume
+    }
+  }, []);
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !audioRef.current.muted;
+      setIsMuted(audioRef.current.muted);
+    }
+  };
+
+  const startAudio = () => {
+    if (audioRef.current && !audioStarted) {
+      audioRef.current.play().catch((err) => {
+        console.log("Autoplay diblokir, harus klik dulu:", err);
+      });
+      setAudioStarted(true);
+    }
+  };
 
   const handleAnswer = (questionId, value) => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
@@ -93,6 +119,7 @@ const App = () => {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-3 sm:p-4 relative overflow-hidden"
+      onClick={startAudio} // ✅ mulai musik saat user klik
       style={{
         backgroundImage: `linear-gradient(rgba(17, 24, 39, 0.85), rgba(6, 78, 128, 0.85)), url('/foto.jpg')`,
         backgroundSize: "cover",
@@ -100,6 +127,19 @@ const App = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
+      {/* BACKSOUND */}
+      <audio ref={audioRef} loop>
+        <source src="/backsound.mp3" type="audio/mpeg" />
+      </audio>
+
+      {/* Tombol kontrol musik */}
+      <button
+        onClick={toggleMute}
+        className="absolute top-4 right-4 bg-black/60 p-2 rounded-full text-cyan-300 hover:bg-black/80 transition"
+      >
+        {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+      </button>
+
       <div className="max-w-6xl w-full relative z-10">
         {/* Judul */}
         <div className="text-center mb-6 sm:mb-8">
