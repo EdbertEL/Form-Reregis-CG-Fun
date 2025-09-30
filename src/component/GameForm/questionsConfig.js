@@ -36,13 +36,13 @@ const questionsConfig = [
     options: ["Pasti ikut!", "Masih mikir-mikir", "Cek jadwal dulu"],
     mood: "hopeful",
   },
-  {
-    id: 6,
-    question: "Ada pesan untuk Team Leader Ivana? 💌",
-    type: "textarea",
-    placeholder: "Tulis pesan, doa, atau harapan kamu...",
-    mood: "love",
-  },
+  // {
+  //   id: 6,
+  //   question: "Ada pesan untuk Team Leader Ivana? 💌",
+  //   type: "textarea",
+  //   placeholder: "Tulis pesan, doa, atau harapan kamu...",
+  //   mood: "love",
+  // },
 ];
 
 export default questionsConfig;

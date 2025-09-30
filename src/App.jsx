@@ -14,7 +14,7 @@ const googleFormMapping = {
   3: "entry.400217152", // Udah ikut CG? (id 3)
   4: "entry.885744090", // CG mana (id 4)
   5: "entry.11659136", // Ikut Light Up? (id 5)
-  6: "entry.2079430505", // Pesan (id 6)
+  // 6: "entry.2079430505", // Pesan (id 6)
 };
 
 const App = () => {
