@@ -1,0 +1,19 @@
+.pixel-text {
+  font-family: "Courier New", monospace;
+  text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+}
+
+.pixel-border {
+  border-style: solid;
+  image-rendering: pixelated;
+}
+
+.pixel-glow {
+  box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, inset 0 0 5px #00ffff;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
