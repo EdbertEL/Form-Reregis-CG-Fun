@@ -39,7 +39,7 @@ const App = () => {
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.1; // atur volume
+      audioRef.current.volume = 0.05; // atur volume
     }
   }, []);
 
