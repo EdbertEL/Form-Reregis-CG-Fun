@@ -15,17 +15,14 @@ const GameComplete = ({ onRestart }) => (
             ✨
           </div>
         </div>
-
         <h1 className="text-3xl sm:text-4xl font-bold text-cyan-300 mb-4 sm:mb-6 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent pixel-text">
-          Mission Complete!
+          Welcome Home <span className="text-white">🎉🎉🎉</span>
         </h1>
-
         <p className="text-base sm:text-lg text-cyan-400 mb-6 sm:mb-8 leading-relaxed pixel-text">
           Terima kasih sudah mengisi form!
           <br />
-          Data kamu sudah tersimpan dengan aman! 🛡️
+          See U at CG FUN 🛡️
         </p>
-
         <div className="flex justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
           {[..."✨🌟💫🎯"].map((emoji, i) => (
             <div
@@ -37,12 +34,11 @@ const GameComplete = ({ onRestart }) => (
             </div>
           ))}
         </div>
-
         <button
           onClick={onRestart}
           className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-black text-lg font-bold rounded-sm hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-2xl pixel-border pixel-glow pixel-text"
         >
-          Main Lagi? 🎮
+          Isi Form Lagi? 🎮
         </button>
       </div>
     </div>

@@ -8,6 +8,15 @@ import GameProgress from "./component/GameForm/GameProgress";
 import GameComplete from "./component/GameForm/GameComplete";
 import "./App.css";
 
+const googleFormMapping = {
+  1: "entry.534010952", // Nama (id 1)
+  2: "entry.1783134984", // Kampus (id 2)
+  3: "entry.400217152", // Udah ikut CG? (id 3)
+  4: "entry.885744090", // CG mana (id 4)
+  5: "entry.11659136", // Ikut Light Up? (id 5)
+  6: "entry.2079430505", // Pesan (id 6)
+};
+
 const App = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -42,9 +51,32 @@ const App = () => {
     }
   };
 
-  const handleSubmit = () => {
-    setIsComplete(true);
-    console.log("Form submitted:", answers);
+  const handleSubmit = async () => {
+    const googleFormURL =
+      "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeXYTBSk-VnGxBYHXnITWwAHY47gLfi7yTTM13q7HvdZ6D_vQ/formResponse";
+
+    const formData = new FormData();
+
+    // Mapping ke Google Form field
+    Object.keys(answers).forEach((qId) => {
+      const entryId = googleFormMapping[qId];
+      if (entryId) {
+        formData.append(entryId, answers[qId]);
+      }
+    });
+
+    try {
+      await fetch(googleFormURL, {
+        method: "POST",
+        mode: "no-cors", // penting! Google Form tidak mengembalikan CORS headers
+        body: formData,
+      });
+
+      setIsComplete(true);
+      console.log("Submitted to Google Form:", answers);
+    } catch (err) {
+      console.error("Error submitting form", err);
+    }
   };
 
   const handleRestart = () => {
