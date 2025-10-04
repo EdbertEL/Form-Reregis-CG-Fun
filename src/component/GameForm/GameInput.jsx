@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import { ChevronDown } from "lucide-react";
 
 const GameInput = ({ data, value, onChange }) => {
   const inputRef = useRef(null);
   const hasFocused = useRef(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     if (!hasFocused.current && inputRef.current) {
@@ -13,12 +16,29 @@ const GameInput = ({ data, value, onChange }) => {
     }
   }, [data.id]);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleInputChange = (e) => {
     onChange(data.id, e.target.value);
   };
 
   const handleRadioChange = (option) => {
     onChange(data.id, option);
+  };
+
+  const handleChoiceChange = (option) => {
+    onChange(data.id, option);
+    setIsOpen(false);
   };
 
   const inputClasses =
@@ -87,6 +107,58 @@ const GameInput = ({ data, value, onChange }) => {
               </span>
             </label>
           ))}
+        </div>
+      )}
+
+      {/* Custom Dropdown untuk type "choice" */}
+      {data.type === "choice" && (
+        <div className="relative mb-4" ref={dropdownRef}>
+          {/* Dropdown Button */}
+          <button
+            type="button"
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-full px-4 py-3 sm:py-4 pr-12 bg-black/90 backdrop-blur-sm border-2 border-cyan-400 rounded-sm text-base sm:text-lg text-cyan-300 focus:outline-none focus:border-cyan-300 shadow-lg pixel-border pixel-glow pixel-text text-left transition-all"
+          >
+            {value || "-- Pilih Coach Kamu --"}
+            <ChevronDown
+              className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-cyan-400 transition-transform duration-200 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+
+          {/* Dropdown Menu - Always opens downward */}
+          {isOpen && (
+            <div className="absolute z-50 w-full mt-2 bg-black/95 backdrop-blur-sm border-2 border-cyan-400 rounded-sm shadow-2xl pixel-border max-h-36 sm:max-h-48 overflow-y-auto">
+              {data.options.map((option, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => handleChoiceChange(option)}
+                  className={`w-full px-3 py-2 text-left text-sm pixel-text transition-all ${
+                    value === option
+                      ? "bg-cyan-900/40 text-cyan-300 font-bold"
+                      : "text-cyan-400 hover:bg-cyan-900/20 hover:text-cyan-300"
+                  }`}
+                >
+                  {value === option && (
+                    <span className="mr-2 text-cyan-400">✓</span>
+                  )}
+                  {option}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Checkmark indicator saat sudah memilih */}
+          {value && !isOpen && (
+            <div className="mt-4 flex items-center gap-2 text-cyan-400 text-sm sm:text-base pixel-text bg-cyan-900/20 border border-cyan-500/30 rounded-sm p-3 pixel-border">
+              <span className="text-lg">✓</span>
+              <span>
+                Kamu memilih: <strong className="text-cyan-300">{value}</strong>
+              </span>
+            </div>
+          )}
         </div>
       )}
     </div>

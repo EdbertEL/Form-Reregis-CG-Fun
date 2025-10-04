@@ -26,8 +26,20 @@ const questionsConfig = [
   {
     id: 4,
     question: "Siapa Coach/Penggembalaan kamu? 😊",
-    type: "text",
-    placeholder: "Contoh: Coach Erick",
+    type: "choice", // 👈 Ubah menjadi "choice"
+    options: [
+      "Coach Nael",
+      "Coach Alvin",
+      "Coach Debora",
+      "Coach Erick",
+      "Coach Kebob",
+      "Coach Keycia",
+      "Coach Levi",
+      "Coach Mike",
+      "Coach Nicholas",
+      "Coach Shella",
+      "Coach Vebry",
+    ],
     mood: "curious",
     conditional: { questionId: 2, answer: "Udah dong! 🎉" },
   },

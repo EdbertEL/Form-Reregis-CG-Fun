@@ -10,7 +10,7 @@ const ThinkingCloud = ({ question, questionId }) => {
     if (!audioRef.current) {
       audioRef.current = new Audio("/sfx_ketik.mp3");
       audioRef.current.loop = true;
-      audioRef.current.volume = 0.3;
+      audioRef.current.volume = 0.5;
     }
 
     setIsTyping(true);

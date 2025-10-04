@@ -208,13 +208,6 @@ const App = () => {
             </div>
           </div>
         </div>
-
-        {/* Footer */}
-        <div className="text-center mt-6 sm:mt-10">
-          <p className="text-cyan-500/80 text-xs sm:text-base font-medium italic pixel-text">
-            "WELCOME HOME" 🌟
-          </p>
-        </div>
       </div>
     </div>
   );
