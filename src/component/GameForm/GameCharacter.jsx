@@ -25,6 +25,8 @@ const GameCharacter = ({ mood, questionId }) => {
       greeting: "🤗",
       curious: "🤔",
       excited: "😆",
+      friendly: "😊",
+      interested: "🧐",
       happy: "😄",
       hopeful: "🌟",
       love: "💝",
