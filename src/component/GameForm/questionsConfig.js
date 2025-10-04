@@ -26,7 +26,7 @@ const questionsConfig = [
     id: 4,
     question: "Wah asik! Dari CG mana kamu? 🏠",
     type: "text",
-    placeholder: "Contoh: CG-101 (Jika coach isi 'Coach')",
+    placeholder: "Contoh: CG-101 / 'Coach' (untuk coach)",
     mood: "happy",
     conditional: { questionId: 3, answer: "Udah dong! 🎉" },
   },
