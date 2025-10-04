@@ -10,10 +10,10 @@ import "./App.css";
 
 const googleFormMapping = {
   1: "entry.534010952", // Nama (id 1)
-  2: "entry.1783134984", // Join CG (id 2)
-  3: "entry.400217152", // CG Mana? (id 3)
-  4: "entry.2113108464", // Coach mana? (id 4)
-  5: "entry.885744090", // No WA (id 5)
+  2: "entry.885744090", // No WA (id 2)
+  3: "entry.1783134984", // Join CG (id 3)
+  4: "entry.400217152", // CG Mana? (id 4)
+  5: "entry.2113108464", // Coach mana? (id 5)
   6: "entry.11659136", // Domisili (id 6)
   7: "entry.11659136", // Daerah untuk "Lainnya" (id 7)
   8: "entry.2079430505", // Kuliah Dimana? (id 8)

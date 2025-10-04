@@ -9,6 +9,13 @@ const questionsConfig = [
   },
   {
     id: 2,
+    question: "Boleh minta nomor WA kamu? 📱",
+    type: "text",
+    placeholder: "Contoh: 08776655xxxx...",
+    mood: "friendly",
+  },
+  {
+    id: 3,
     question: "Udah join CG belum nih? 🌟",
     type: "radio",
     options: ["Udah dong! 🎉", "Belum nih, penasaran! 🤔"],
@@ -16,17 +23,17 @@ const questionsConfig = [
   },
   // Pertanyaan untuk yang SUDAH join CG
   {
-    id: 3,
+    id: 4,
     question: "Wah asik! Dari CG mana kamu? 🏠",
     type: "text",
     placeholder: "Contoh: CG-101 (Jika coach isi 'Coach')",
     mood: "happy",
-    conditional: { questionId: 2, answer: "Udah dong! 🎉" },
+    conditional: { questionId: 3, answer: "Udah dong! 🎉" },
   },
   {
-    id: 4,
+    id: 5,
     question: "Siapa Coach/Penggembalaan kamu? 😊",
-    type: "choice", // 👈 Ubah menjadi "choice"
+    type: "choice",
     options: [
       "Coach Nael",
       "Coach Alvin",
@@ -41,24 +48,16 @@ const questionsConfig = [
       "Coach Vebry",
     ],
     mood: "curious",
-    conditional: { questionId: 2, answer: "Udah dong! 🎉" },
+    conditional: { questionId: 3, answer: "Udah dong! 🎉" },
   },
   // Pertanyaan untuk yang BELUM join CG
-  {
-    id: 5,
-    question: "Boleh minta nomor WA kamu? 📱",
-    type: "text",
-    placeholder: "Contoh: 08776655xxxx...",
-    mood: "friendly",
-    conditional: { questionId: 2, answer: "Belum nih, penasaran! 🤔" },
-  },
   {
     id: 6,
     question: "Kamu tinggal di daerah mana? 📍",
     type: "radio",
     options: ["Gading Serpong", "BSD", "Lainnya"],
     mood: "curious",
-    conditional: { questionId: 2, answer: "Belum nih, penasaran! 🤔" },
+    conditional: { questionId: 3, answer: "Belum nih, penasaran! 🤔" },
   },
   {
     id: 7,
@@ -67,8 +66,8 @@ const questionsConfig = [
     placeholder: "Tulis daerah domisili kamu...",
     mood: "curious",
     conditional: { questionId: 6, answer: "Lainnya" },
-    isOtherOption: true, // 👈 Tambahkan ini
-    parentEntry: "entry.11659136", // 👈 Dan ini (entry ID dari pertanyaan 6)
+    isOtherOption: true,
+    parentEntry: "entry.11659136",
   },
   {
     id: 8,
@@ -76,7 +75,7 @@ const questionsConfig = [
     type: "text",
     placeholder: "Nama universitas dan jurusan...",
     mood: "interested",
-    conditional: { questionId: 2, answer: "Belum nih, penasaran! 🤔" },
+    conditional: { questionId: 3, answer: "Belum nih, penasaran! 🤔" },
   },
 ];
 
