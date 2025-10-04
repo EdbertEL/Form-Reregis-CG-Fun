@@ -3,15 +3,19 @@ const GameComplete = ({ onRestart }) => (
     <div className="max-w-2xl w-full text-center">
       <div className="bg-black/95 backdrop-blur-xl rounded-sm p-6 sm:p-10 shadow-2xl pixel-border pixel-glow">
         <div className="mb-6 sm:mb-8 relative inline-block">
-          <div className="w-24 h-24 sm:w-36 sm:h-36 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-none flex items-center justify-center shadow-2xl animate-bounce pixel-border pixel-glow">
-            <span className="text-5xl sm:text-6xl pixel-text">🎮</span>
+          {/* GIF menggantikan div animasi bounce */}
+          <div className="w-24 h-24 sm:w-36 sm:h-36 rounded-none flex items-center justify-center shadow-2xl pixel-border pixel-glow overflow-hidden">
+            <img
+              src="/wave.gif"
+              alt="Game Icon"
+              className="w-full h-full object-cover"
+            />
           </div>
-          <div className="absolute -inset-4 bg-gradient-to-br from-cyan-400/30 to-blue-500/30 rounded-none blur-xl animate-pulse pixel-border"></div>
 
-          <div className="absolute -top-3 -right-3 text-xl sm:text-2xl animate-spin pixel-text">
+          <div className="absolute -top-3 -right-3 text-xl sm:text-2xl pixel-text">
             🎉
           </div>
-          <div className="absolute -bottom-1 -left-3 text-lg sm:text-xl animate-bounce pixel-text">
+          <div className="absolute -bottom-1 -left-3 text-lg sm:text-xl pixel-text">
             ✨
           </div>
         </div>

@@ -3,12 +3,23 @@ import React, { useEffect, useRef, useState } from "react";
 const ThinkingCloud = ({ question, questionId }) => {
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const audioRef = useRef(null);
 
   useEffect(() => {
+    // Initialize audio
+    if (!audioRef.current) {
+      audioRef.current = new Audio("/sfx_ketik.mp3");
+      audioRef.current.loop = true;
+      audioRef.current.volume = 0.3;
+    }
+
     setIsTyping(true);
     setDisplayedText("");
 
     if (!question) return;
+
+    // Play typing sound
+    audioRef.current.play().catch((e) => console.log("Audio play failed:", e));
 
     let i = 0;
     const typingInterval = setInterval(() => {
@@ -18,11 +29,19 @@ const ThinkingCloud = ({ question, questionId }) => {
       } else {
         setIsTyping(false);
         clearInterval(typingInterval);
+        // Stop typing sound
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
       }
     }, 30);
 
     return () => {
       clearInterval(typingInterval);
+      // Stop sound on cleanup
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
     };
   }, [questionId, question]); // <-- cukup bergantung ke questionId & question
 

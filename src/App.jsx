@@ -10,10 +10,13 @@ import "./App.css";
 
 const googleFormMapping = {
   1: "entry.534010952", // Nama (id 1)
-  2: "entry.1783134984", // Kampus (id 2)
-  3: "entry.400217152", // Udah ikut CG? (id 3)
-  4: "entry.885744090", // CG mana (id 4)
-  5: "entry.11659136", // Ikut Light Up? (id 5)
+  2: "entry.1783134984", // Join CG (id 2)
+  3: "entry.400217152", // CG Mana? (id 3)
+  4: "entry.2113108464", // Coach mana? (id 4)
+  5: "entry.885744090", // No WA (id 5)
+  6: "entry.11659136", // Domisili (id 6)
+  7: "entry.11659136", // Daerah untuk "Lainnya" (id 7)
+  8: "entry.2079430505", // Kuliah Dimana? (id 8)
 };
 
 const App = () => {
@@ -30,7 +33,12 @@ const App = () => {
       return conditionalAnswer === q.conditional.answer;
     });
     setVisibleQuestions(filtered);
-  }, [answers]);
+
+    // Reset ke pertanyaan terakhir yang valid jika currentQuestion melebihi panjang array
+    if (currentQuestion >= filtered.length && filtered.length > 0) {
+      setCurrentQuestion(filtered.length - 1);
+    }
+  }, [answers, currentQuestion]);
 
   const handleAnswer = (questionId, value) => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
@@ -52,15 +60,34 @@ const App = () => {
 
   const handleSubmit = async () => {
     const googleFormURL =
-      "https://docs.google.com/forms/u/0/d/e/1FAIpQLSeXYTBSk-VnGxBYHXnITWwAHY47gLfi7yTTM13q7HvdZ6D_vQ/formResponse";
+      "https://docs.google.com/forms/u/0/d/e/1FAIpQLSewcASxOm3M0XODFLasAdNtpx5qKMoGD5N61_NVwBkJGts5XA/formResponse";
 
     const formData = new FormData();
 
     // Mapping ke Google Form field
     Object.keys(answers).forEach((qId) => {
       const entryId = googleFormMapping[qId];
+      const question = questionsConfig.find((q) => q.id === parseInt(qId));
+
       if (entryId) {
-        formData.append(entryId, answers[qId]);
+        // Handle pertanyaan "Lainnya" dengan benar
+        if (parseInt(qId) === 7) {
+          // Pertanyaan 7 adalah "other option" dari pertanyaan 6
+          // Kirim "__other_option__" untuk pertanyaan 6
+          formData.append("entry.11659136", "__other_option__");
+          // Kirim nilai sebenarnya ke other_option_response
+          formData.append("entry.11659136.other_option_response", answers[qId]);
+        } else if (parseInt(qId) === 6 && answers[qId] === "Lainnya") {
+          // Jika user pilih "Lainnya" di pertanyaan 6
+          // Tapi jawaban sebenarnya ada di pertanyaan 7, jadi skip dulu
+          if (!answers[7]) {
+            // Kalau belum ada jawaban di pertanyaan 7, kirim "Lainnya"
+            formData.append(entryId, answers[qId]);
+          }
+        } else {
+          // Pertanyaan biasa
+          formData.append(entryId, answers[qId]);
+        }
       }
     });
 
@@ -73,6 +100,7 @@ const App = () => {
 
       setIsComplete(true);
       console.log("Submitted to Google Form:", answers);
+      console.log("FormData entries:", Array.from(formData.entries()));
     } catch (err) {
       console.error("Error submitting form", err);
     }
@@ -86,6 +114,15 @@ const App = () => {
 
   const currentQ = visibleQuestions[currentQuestion];
   const canProceed = currentQ && answers[currentQ.id];
+
+  // Cek apakah ada pertanyaan conditional yang bergantung pada pertanyaan saat ini
+  const hasConditionalQuestions = questionsConfig.some(
+    (q) => q.conditional && q.conditional.questionId === currentQ?.id
+  );
+
+  // Tentukan apakah ini pertanyaan terakhir
+  const isLastQuestion =
+    currentQuestion === visibleQuestions.length - 1 && !hasConditionalQuestions;
 
   if (isComplete) return <GameComplete onRestart={handleRestart} />;
 
@@ -165,9 +202,7 @@ const App = () => {
         : "bg-gradient-to-r from-cyan-500 to-blue-600 text-gray-700 hover:from-cyan-600 hover:to-blue-700 transform hover:scale-105 shadow-2xl pixel-glow"
     }`}
               >
-                {currentQuestion === visibleQuestions.length - 1
-                  ? "COMPLETE QUEST! 🏆"
-                  : "NEXT LEVEL"}
+                {isLastQuestion ? "COMPLETE QUEST! 🏆" : "NEXT LEVEL"}
                 <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
               </button>
             </div>

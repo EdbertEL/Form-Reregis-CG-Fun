@@ -12,7 +12,7 @@ function AppWithAudio() {
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.05;
+      audioRef.current.volume = 0.02;
     }
   }, []);
 
