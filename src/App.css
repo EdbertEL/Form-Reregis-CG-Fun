@@ -1,6 +1,6 @@
 .pixel-text {
   font-family: "Courier New", monospace;
-  text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+  text-shadow: 0 0 4px #00ffffc8, 0 0 8px #00ffffc8;
 }
 
 .pixel-border {
@@ -9,7 +9,7 @@
 }
 
 .pixel-glow {
-  box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, inset 0 0 5px #00ffff;
+  box-shadow: 0 0 4px #00ffffc8, 0 0 8px #00ffffc8, inset 0 0 4px #00ffffc8;
 }
 
 .pixelated {

@@ -66,7 +66,7 @@ const ThinkingCloud = ({ question, questionId }) => {
 
         <div className="relative z-10">
           <div className="min-h-[3rem] sm:min-h-[4rem] flex items-center">
-            <p className="text-lg sm:text-xl md:text-2xl font-bold text-cyan-300 leading-relaxed pixel-text">
+            <p className="text-lg sm:text-xl md:text-2xl font-bold text-gray-200 leading-relaxed pixel-text">
               {displayedText}
               {isTyping && (
                 <span className="inline-block w-2 h-5 sm:h-6 bg-cyan-400 ml-1 animate-pulse pixel-border"></span>

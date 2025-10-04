@@ -42,8 +42,7 @@ const GameInput = ({ data, value, onChange }) => {
   };
 
   const inputClasses =
-    "w-full px-4 py-3 bg-black/90 backdrop-blur-sm border-2 border-cyan-400 rounded-sm text-base text-cyan-300 placeholder:text-cyan-400/80 focus:outline-none focus:border-cyan-300 shadow-lg pixel-border pixel-glow pixel-text";
-
+    "w-full px-3 sm:px-4 py-3 bg-black/90 backdrop-blur-sm border-2 border-cyan-400 rounded-sm text-sm sm:text-base text-gray-200 placeholder:text-xs sm:placeholder:text-sm placeholder:text-gray-400/80 focus:outline-none focus:border-cyan-300 shadow-lg pixel-border pixel-glow pixel-text";
   return (
     <div className="w-full max-w-full sm:max-w-2xl mx-auto">
       {data.type === "text" && (
@@ -100,7 +99,7 @@ const GameInput = ({ data, value, onChange }) => {
               </div>
               <span
                 className={`text-sm sm:text-base font-medium pixel-text ${
-                  value === option ? "text-cyan-300" : "text-cyan-400"
+                  value === option ? "text-gray-200" : "text-gray-300"
                 }`}
               >
                 {option}

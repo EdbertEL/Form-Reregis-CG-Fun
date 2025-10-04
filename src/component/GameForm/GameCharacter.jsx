@@ -48,7 +48,7 @@ const GameCharacter = ({ mood, questionId }) => {
         <div className="absolute inset-0 rounded-sm bg-cyan-400/40 blur-md pixel-glow"></div>
       </div>
 
-      <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-cyan-400 to-blue-500 text-black px-2 sm:px-3 py-1 rounded-sm shadow-lg pixel-border pixel-glow">
+      <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-blue-900 to-cyan-500 text-gray-200 px-2 sm:px-3 py-1 rounded-sm shadow-lg pixel-border pixel-glow">
         <p className="text-[10px] sm:text-xs font-bold whitespace-nowrap pixel-text">
           Light Buddy
         </p>

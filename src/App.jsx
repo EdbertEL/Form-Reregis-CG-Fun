@@ -139,10 +139,10 @@ const App = () => {
       <div className="max-w-6xl w-full relative z-10">
         {/* Judul */}
         <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-cyan-300 mb-2 sm:mb-4 pixel-text pixel-glow">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-100 mb-2 sm:mb-4 pixel-text pixel-glow">
             ✨ LIGHT UP ✨
           </h1>
-          <p className="text-cyan-500 text-sm sm:text-lg font-medium pixel-text">
+          <p className="text-gray-100 text-sm sm:text-lg font-medium pixel-text">
             CG FUN Team Leader Ivana
           </p>
         </div>
@@ -199,7 +199,7 @@ const App = () => {
     ${
       !canProceed
         ? "bg-gray-800/50 text-gray-200 cursor-not-allowed"
-        : "bg-gradient-to-r from-cyan-500 to-blue-600 text-gray-700 hover:from-cyan-600 hover:to-blue-700 transform hover:scale-105 shadow-2xl pixel-glow"
+        : "bg-gradient-to-r from-cyan-500 to-blue-600 text-cyan-800 hover:from-cyan-600 hover:to-blue-700 transform hover:scale-105 shadow-2xl pixel-glow"
     }`}
               >
                 {isLastQuestion ? "COMPLETE QUEST! 🏆" : "NEXT LEVEL"}
