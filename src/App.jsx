@@ -9,14 +9,15 @@ import GameComplete from "./component/GameForm/GameComplete";
 import "./App.css";
 
 const googleFormMapping = {
-  1: "entry.534010952", // Nama (id 1)
-  2: "entry.885744090", // No WA (id 2)
-  3: "entry.1783134984", // Join CG (id 3)
-  4: "entry.400217152", // CG Mana? (id 4)
-  5: "entry.2113108464", // Coach mana? (id 5)
-  6: "entry.11659136", // Domisili (id 6)
-  7: "entry.11659136", // Daerah untuk "Lainnya" (id 7)
-  8: "entry.2079430505", // Kuliah Dimana? (id 8)
+  1: "entry.806349319", // Nama (id 1)
+  2: "entry.1091266817", // No WA (id 2)
+  3: "entry.2096403310", // Email (id 3)
+  4: "entry.1299813234", // Join CG (id 4)
+  5: "entry.221433276", // CG Mana? (id 5)
+  6: "entry.1177169828", // Coach mana? (id 6)
+  7: "entry.123821330", // Domisili (id 7)
+  8: "entry.123821330", // Daerah untuk "Lainnya" (id 8)
+  9: "entry.1567928656", // Kuliah Dimana? (id 9)
 };
 
 const App = () => {
@@ -60,7 +61,7 @@ const App = () => {
 
   const handleSubmit = async () => {
     const googleFormURL =
-      "https://docs.google.com/forms/u/0/d/e/1FAIpQLSewcASxOm3M0XODFLasAdNtpx5qKMoGD5N61_NVwBkJGts5XA/formResponse";
+      "https://docs.google.com/forms/d/e/1FAIpQLSef3YKIBgsw2GPdgE0Nr3bir3UtUlc0qdNkzgBDiX6xs4nVmA/viewform";
 
     const formData = new FormData();
 
@@ -74,9 +75,9 @@ const App = () => {
         if (parseInt(qId) === 7) {
           // Pertanyaan 7 adalah "other option" dari pertanyaan 6
           // Kirim "__other_option__" untuk pertanyaan 6
-          formData.append("entry.11659136", "__other_option__");
+          formData.append("entry.123821330", "__other_option__");
           // Kirim nilai sebenarnya ke other_option_response
-          formData.append("entry.11659136.other_option_response", answers[qId]);
+          formData.append("entry.123821330.other_option_response", answers[qId]);
         } else if (parseInt(qId) === 6 && answers[qId] === "Lainnya") {
           // Jika user pilih "Lainnya" di pertanyaan 6
           // Tapi jawaban sebenarnya ada di pertanyaan 7, jadi skip dulu

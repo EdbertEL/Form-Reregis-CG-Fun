@@ -14,8 +14,15 @@ const questionsConfig = [
     placeholder: "Contoh: 08776655xxxx...",
     mood: "friendly",
   },
-  {
+    {
     id: 3,
+    question: "Boleh minta email kamu? 📩",
+    type: "text",
+    placeholder: "Contoh: encounterthelight@gmail.com",
+    mood: "default",
+  },
+  {
+    id: 4,
     question: "Udah join CG belum nih? 🌟",
     type: "radio",
     options: ["Udah dong! 🎉", "Belum nih, penasaran! 🤔"],
@@ -23,15 +30,15 @@ const questionsConfig = [
   },
   // Pertanyaan untuk yang SUDAH join CG
   {
-    id: 4,
+    id: 5,
     question: "Wah asik! Dari CG mana kamu? 🏠",
     type: "text",
     placeholder: "Contoh: CG 101 / 'Coach' (untuk coach)",
     mood: "happy",
-    conditional: { questionId: 3, answer: "Udah dong! 🎉" },
+    conditional: { questionId: 4, answer: "Udah dong! 🎉" },
   },
   {
-    id: 5,
+    id: 6,
     question: "Siapa Coach/Penggembalaan kamu? 😊",
     type: "choice",
     options: [
@@ -48,34 +55,34 @@ const questionsConfig = [
       "Coach Vebry",
     ],
     mood: "curious",
-    conditional: { questionId: 3, answer: "Udah dong! 🎉" },
+    conditional: { questionId: 4, answer: "Udah dong! 🎉" },
   },
   // Pertanyaan untuk yang BELUM join CG
   {
-    id: 6,
+    id: 7,
     question: "Kamu tinggal di daerah mana? 📍",
     type: "radio",
     options: ["Gading Serpong", "BSD", "Lainnya"],
     mood: "curious",
-    conditional: { questionId: 3, answer: "Belum nih, penasaran! 🤔" },
+    conditional: { questionId: 4, answer: "Belum nih, penasaran! 🤔" },
   },
   {
-    id: 7,
+    id: 8,
     question: "Boleh tau daerah kamu dimana? 📍",
     type: "text",
     placeholder: "Tulis daerah domisili kamu...",
     mood: "curious",
-    conditional: { questionId: 6, answer: "Lainnya" },
+    conditional: { questionId: 7, answer: "Lainnya" },
     isOtherOption: true,
-    parentEntry: "entry.11659136",
+    parentEntry: "entry.123821330",
   },
   {
-    id: 8,
+    id: 9,
     question: "Kuliah dimana sekarang? 🎓",
     type: "text",
     placeholder: "Contoh: UMN / Prasmul / Atmajaya...",
     mood: "interested",
-    conditional: { questionId: 3, answer: "Belum nih, penasaran! 🤔" },
+    conditional: { questionId: 4, answer: "Belum nih, penasaran! 🤔" },
   },
 ];
 
