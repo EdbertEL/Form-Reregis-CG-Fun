@@ -25,6 +25,7 @@ const App = () => {
   const [answers, setAnswers] = useState({});
   const [isComplete, setIsComplete] = useState(false);
   const [visibleQuestions, setVisibleQuestions] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Filter pertanyaan dengan conditional
   useEffect(() => {
@@ -46,6 +47,9 @@ const App = () => {
   };
 
   const handleNext = () => {
+    // Prevent multiple clicks
+    if (isSubmitting) return;
+
     if (currentQuestion < visibleQuestions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
     } else {
@@ -60,16 +64,21 @@ const App = () => {
   };
 
   const handleSubmit = async () => {
+    // Prevent double submission
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
     const googleFormURL =
       "https://docs.google.com/forms/d/e/1FAIpQLSef3YKIBgsw2GPdgE0Nr3bir3UtUlc0qdNkzgBDiX6xs4nVmA/formResponse";
 
     const formData = new FormData();
 
     // Mapping ke Google Form field
-  Object.keys(answers).forEach((qId) => {
-    const entryId = googleFormMapping[qId];
-    const question = questionsConfig.find((q) => q.id === parseInt(qId));
-    const answer = answers[qId];
+    Object.keys(answers).forEach((qId) => {
+      const entryId = googleFormMapping[qId];
+      const question = questionsConfig.find((q) => q.id === parseInt(qId));
+      const answer = answers[qId];
 
       if (entryId) {
         // Handle pertanyaan "Lainnya" dengan benar
@@ -77,24 +86,24 @@ const App = () => {
           // Pertanyaan 8 adalah "other option" dari pertanyaan 7
           if (answer === "Lainnya") {
             const otherOption = answers[8];
-          // Kirim "__other_option__" untuk pertanyaan 7
-            if (otherOption){
+            // Kirim "__other_option__" untuk pertanyaan 7
+            if (otherOption) {
               formData.append(googleFormMapping[7], "__other_option__");
               formData.append(googleFormMapping[8], otherOption);
             }
-        } else {
-          // Jika jawabannya bukan "Lainnya" (misal: "BSD"), kirim seperti biasa.
+          } else {
+            // Jika jawabannya bukan "Lainnya" (misal: "BSD"), kirim seperti biasa.
+            formData.append(entryId, answer);
+          }
+        }
+        // Kasus 2: Abaikan pertanyaan text input "Lainnya" (id: 8)
+        // karena sudah kita proses di atas sebagai bagian dari pertanyaan id: 7.
+        else if (parseInt(qId) !== 8) {
+          // Kasus 3: Untuk semua pertanyaan lain, kirim seperti biasa.
           formData.append(entryId, answer);
         }
-      } 
-      // Kasus 2: Abaikan pertanyaan text input "Lainnya" (id: 8)
-      // karena sudah kita proses di atas sebagai bagian dari pertanyaan id: 7.
-      else if (parseInt(qId) !== 8) {
-        // Kasus 3: Untuk semua pertanyaan lain, kirim seperti biasa.
-        formData.append(entryId, answer);
       }
-    }
-  });
+    });
 
     try {
       await fetch(googleFormURL, {
@@ -108,6 +117,7 @@ const App = () => {
       console.log("FormData entries:", Array.from(formData.entries()));
     } catch (err) {
       console.error("Error submitting form", err);
+      setIsSubmitting(false); // Reset on error
     }
   };
 
@@ -115,6 +125,7 @@ const App = () => {
     setIsComplete(false);
     setCurrentQuestion(0);
     setAnswers({});
+    setIsSubmitting(false); // Reset submitting state
   };
 
   const currentQ = visibleQuestions[currentQuestion];
@@ -198,17 +209,27 @@ const App = () => {
 
               <button
                 onClick={handleNext}
-                disabled={!canProceed}
+                disabled={!canProceed || isSubmitting}
                 className={`px-5 py-2 md:px-6 md:py-3 rounded-sm font-bold transition-all duration-300 
     flex items-center gap-2 pixel-border pixel-text 
     ${
-      !canProceed
+      !canProceed || isSubmitting
         ? "bg-gray-800/50 text-gray-200 cursor-not-allowed"
         : "bg-gradient-to-r from-cyan-500 to-blue-600 text-cyan-800 hover:from-cyan-600 hover:to-blue-700 transform hover:scale-105 shadow-2xl pixel-glow"
     }`}
               >
-                {isLastQuestion ? "COMPLETE QUEST! 🏆" : "NEXT LEVEL"}
-                <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+                {isSubmitting ? (
+                  <>
+                    <span className="animate-spin">⏳</span> SUBMITTING...
+                  </>
+                ) : isLastQuestion ? (
+                  "COMPLETE QUEST! 🏆"
+                ) : (
+                  "NEXT LEVEL"
+                )}
+                {!isSubmitting && (
+                  <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+                )}
               </button>
             </div>
           </div>
