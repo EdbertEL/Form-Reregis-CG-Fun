@@ -66,32 +66,36 @@ const App = () => {
     const formData = new FormData();
 
     // Mapping ke Google Form field
-    Object.keys(answers).forEach((qId) => {
-      const entryId = googleFormMapping[qId];
-      const question = questionsConfig.find((q) => q.id === parseInt(qId));
+  Object.keys(answers).forEach((qId) => {
+    const entryId = googleFormMapping[qId];
+    const question = questionsConfig.find((q) => q.id === parseInt(qId));
+    const answer = answers[qId];
 
       if (entryId) {
         // Handle pertanyaan "Lainnya" dengan benar
         if (parseInt(qId) === 7) {
           // Pertanyaan 8 adalah "other option" dari pertanyaan 7
+          if (answer === "Lainnya") {
+            const otherOption = answers[8];
           // Kirim "__other_option__" untuk pertanyaan 7
-          formData.append("entry.11659136", "__other_option__");
-          // Kirim nilai sebenarnya ke other_option_response
-          formData.append("entry.11659136.other_option_response", answers[qId]);
-        } else if (parseInt(qId) === 7 && answers[qId] === "Lainnya") {
-          // Jika user pilih "Lainnya" di pertanyaan 7
-          // Tapi jawaban sebenarnya ada di pertanyaan 7, jadi skip dulu
-          if (!answers[7]) {
-            // Kalau belum ada jawaban di pertanyaan 7, kirim "Lainnya"
-            formData.append(entryId, answers[qId]);
-          }
+            if (otherOption){
+              formData.append(googleFormMapping[7], "__other_option__");
+              formData.append(googleFormMapping[8], "otherOption");
+            }
         } else {
-          // Pertanyaan biasa
-          formData.append(entryId, answers[qId]);
+          // Jika jawabannya bukan "Lainnya" (misal: "BSD"), kirim seperti biasa.
+          formData.append(entryId, answer);
         }
+      } 
+      // Kasus 2: Abaikan pertanyaan text input "Lainnya" (id: 8)
+      // karena sudah kita proses di atas sebagai bagian dari pertanyaan id: 7.
+      else if (numericQId !== 8) {
+        // Kasus 3: Untuk semua pertanyaan lain, kirim seperti biasa.
+        formData.append(entryId, answer);
       }
-    });
-
+    }
+  });
+  
     try {
       await fetch(googleFormURL, {
         method: "POST",
