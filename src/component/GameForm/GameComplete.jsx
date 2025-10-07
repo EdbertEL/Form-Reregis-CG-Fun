@@ -1,5 +1,13 @@
 const GameComplete = ({ onRestart, assignmentData }) => (
-  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-cyan-900 flex items-center justify-center p-4">
+  <div
+    className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-cyan-900 flex items-center justify-center p-4"
+    style={{
+      backgroundImage: `linear-gradient(rgba(17, 24, 39, 0.85), rgba(6, 78, 128, 0.85)), url('/foto.jpg')`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+    }}
+  >
     <div className="max-w-2xl w-full text-center">
       <div className="bg-black/95 backdrop-blur-xl rounded-sm p-6 sm:p-10 shadow-2xl pixel-border pixel-glow">
         <div className="mb-6 sm:mb-8 relative inline-block">
@@ -20,38 +28,38 @@ const GameComplete = ({ onRestart, assignmentData }) => (
           </div>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent pixel-text">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-gray-400 to-gray-200 bg-clip-text text-transparent pixel-text">
           Welcome Home <span className="text-white">🎉🎉🎉</span>
         </h1>
 
         {/* Info Kelompok Assignment */}
         {assignmentData ? (
           <div className="bg-gradient-to-br from-cyan-900/40 to-blue-900/40 backdrop-blur-sm rounded-sm p-4 sm:p-6 mb-6 border-2 border-cyan-400/50 pixel-border">
-            <h2 className="text-xl sm:text-2xl font-bold text-cyan-300 mb-4 pixel-text">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-300 mb-4 pixel-text">
               📋 Informasi Kelompok Anda
             </h2>
             <div className="space-y-3 text-left">
               <div className="flex justify-between items-center border-b border-cyan-400/30 pb-2">
                 <span className="text-gray-300 pixel-text">Nama:</span>
-                <span className="text-cyan-300 font-bold pixel-text">
+                <span className="text-gray-200 font-bold pixel-text">
                   {assignmentData.nama}
                 </span>
               </div>
               <div className="flex justify-between items-center border-b border-cyan-400/30 pb-2">
                 <span className="text-gray-300 pixel-text">Kelompok:</span>
-                <span className="text-cyan-300 font-bold pixel-text">
+                <span className="text-gray-200 font-bold pixel-text">
                   {assignmentData.groupName}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-gray-300 pixel-text">PIC:</span>
-                <span className="text-cyan-300 font-bold pixel-text">
+                <span className="text-gray-200 font-bold pixel-text">
                   {assignmentData.pic}
                 </span>
               </div>
             </div>
             <div className="mt-4 p-3 bg-blue-900/30 rounded-sm border border-cyan-400/20">
-              <p className="text-sm text-cyan-200 pixel-text">
+              <p className="text-sm text-gray-200 pixel-text">
                 📧 Email konfirmasi sudah dikirim ke inbox Anda!
               </p>
             </div>
@@ -64,7 +72,7 @@ const GameComplete = ({ onRestart, assignmentData }) => (
           </div>
         )}
 
-        <p className="text-base sm:text-lg text-cyan-400 mb-6 sm:mb-8 leading-relaxed pixel-text">
+        <p className="text-base sm:text-lg text-gray-200 mb-6 sm:mb-8 leading-relaxed pixel-text">
           Terima kasih sudah mengisi form!
           <br />
           See U at CG FUN 🛡️
