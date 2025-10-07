@@ -61,7 +61,7 @@ const App = () => {
 
   const handleSubmit = async () => {
     const googleFormURL =
-      "https://docs.google.com/forms/d/e/1FAIpQLSef3YKIBgsw2GPdgE0Nr3bir3UtUlc0qdNkzgBDiX6xs4nVmA/viewform";
+      "https://docs.google.com/forms/d/e/1FAIpQLSef3YKIBgsw2GPdgE0Nr3bir3UtUlc0qdNkzgBDiX6xs4nVmA/formResponse";
 
     const formData = new FormData();
 
