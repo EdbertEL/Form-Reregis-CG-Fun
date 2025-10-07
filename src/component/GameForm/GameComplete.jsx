@@ -36,7 +36,7 @@ const GameComplete = ({ onRestart, assignmentData }) => (
         {assignmentData ? (
           <div className="bg-gradient-to-br from-cyan-900/40 to-blue-900/40 backdrop-blur-sm rounded-sm p-4 sm:p-6 mb-6 border-2 border-cyan-400/50 pixel-border">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-300 mb-4 pixel-text">
-              📋 Informasi Kelompok Anda
+              📋 Informasi Kelompok Kamu
             </h2>
             <div className="space-y-3 text-left">
               <div className="flex justify-between items-center border-b border-cyan-400/30 pb-2">
@@ -60,7 +60,7 @@ const GameComplete = ({ onRestart, assignmentData }) => (
             </div>
             <div className="mt-4 p-3 bg-blue-900/30 rounded-sm border border-cyan-400/20">
               <p className="text-sm text-gray-200 pixel-text">
-                📧 Email konfirmasi sudah dikirim ke inbox Anda!
+                📧 Email konfirmasi sudah dikirim ke inbox kamu ya...!
               </p>
             </div>
           </div>
@@ -92,7 +92,7 @@ const GameComplete = ({ onRestart, assignmentData }) => (
 
         <button
           onClick={onRestart}
-          className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-black text-lg font-bold rounded-sm hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-2xl pixel-border pixel-glow pixel-text"
+          className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-gray-800 text-lg font-bold rounded-sm hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-2xl pixel-border pixel-glow pixel-text"
         >
           Isi Form Lagi? 🎮
         </button>
