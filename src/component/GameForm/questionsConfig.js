@@ -14,12 +14,12 @@ const questionsConfig = [
     placeholder: "Contoh: 08776655xxxx...",
     mood: "friendly",
   },
-    {
+  {
     id: 3,
-    question: "Boleh minta email kamu? 📩",
+    question: "Boleh minta email kamu? (Buat notif kelompok otomatis 📧✨)",
     type: "text",
     placeholder: "Contoh: encounterthelight@gmail.com",
-    mood: "default",
+    mood: "friendly",
   },
   {
     id: 4,

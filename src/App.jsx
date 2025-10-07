@@ -26,6 +26,11 @@ const App = () => {
   const [isComplete, setIsComplete] = useState(false);
   const [visibleQuestions, setVisibleQuestions] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [assignmentData, setAssignmentData] = useState(null);
+
+  const ASSIGNMENT_API_URL =
+    import.meta.env.VITE_ASSIGNMENT_API_URL ||
+    "https://script.google.com/macros/s/AKfycbxZVwRCsshJVzEKM4rfoKnSJG5bLFDWtbrSowiCGv33UBG4jl-mPvqm0YtsThKmzNX-FA/exec";
 
   // Filter pertanyaan dengan conditional
   useEffect(() => {
@@ -106,18 +111,82 @@ const App = () => {
     });
 
     try {
+      // 1. Submit ke Google Form (tetap seperti biasa)
       await fetch(googleFormURL, {
         method: "POST",
         mode: "no-cors",
         body: formData,
       });
 
-      setIsComplete(true);
       console.log("Submitted to Google Form:", answers);
-      console.log("FormData entries:", Array.from(formData.entries()));
+
+      // 2. Kirim ke Assignment API untuk assign kelompok
+      const assignmentPayload = {
+        nama: answers[1] || "",
+        noWA: answers[2] || "",
+        email: answers[3] || "",
+        joinCG: answers[4] || "",
+        cgMana: answers[5] || "",
+        coach: answers[6] || "",
+        domisili: answers[7] === "Lainnya" ? answers[8] : answers[7] || "",
+        kuliahDimana: answers[9] || "",
+      };
+
+      console.log("Sending assignment payload:", assignmentPayload);
+      console.log("API URL:", ASSIGNMENT_API_URL);
+
+      // Build query parameters for GET request (to avoid CORS)
+      const queryParams = new URLSearchParams(assignmentPayload).toString();
+      const apiUrlWithParams = `${ASSIGNMENT_API_URL}?${queryParams}`;
+
+      console.log("Full API URL with params:", apiUrlWithParams);
+
+      const assignmentResponse = await fetch(apiUrlWithParams, {
+        method: "GET",
+      });
+
+      console.log("Response status:", assignmentResponse.status);
+      console.log("Response ok:", assignmentResponse.ok);
+
+      const assignmentResult = await assignmentResponse.json();
+
+      console.log("Assignment result:", assignmentResult);
+
+      if (assignmentResult.success) {
+        // Simpan data assignment untuk ditampilkan di GameComplete
+        setAssignmentData({
+          groupName: assignmentResult.assignment.groupName,
+          pic: assignmentResult.assignment.pic,
+          nama: assignmentPayload.nama,
+        });
+        setIsComplete(true);
+      } else {
+        // Handle assignment error but still show completion
+        console.error("Assignment failed:", assignmentResult.error);
+        alert(
+          "Form berhasil dikirim, tetapi terjadi kesalahan saat assign kelompok. Tim kami akan memproses secara manual."
+        );
+        // Still set complete even if assignment fails
+        setAssignmentData({
+          groupName: "Menunggu Assignment",
+          pic: "Tim Admin",
+          nama: assignmentPayload.nama,
+        });
+        setIsComplete(true);
+      }
     } catch (err) {
-      console.error("Error submitting form", err);
+      console.error("Error submitting form:", err);
+      console.error("Error details:", err.message);
       setIsSubmitting(false); // Reset on error
+
+      // Show more specific error message
+      if (err.message.includes("fetch")) {
+        alert(
+          "Gagal menghubungi server assignment. Form Google sudah tersimpan, tetapi assignment kelompok gagal. Silakan hubungi admin."
+        );
+      } else {
+        alert("Terjadi kesalahan saat mengirim data. Silakan coba lagi.");
+      }
     }
   };
 
@@ -126,6 +195,7 @@ const App = () => {
     setCurrentQuestion(0);
     setAnswers({});
     setIsSubmitting(false); // Reset submitting state
+    setAssignmentData(null); // Reset assignment data
   };
 
   const currentQ = visibleQuestions[currentQuestion];
@@ -140,7 +210,10 @@ const App = () => {
   const isLastQuestion =
     currentQuestion === visibleQuestions.length - 1 && !hasConditionalQuestions;
 
-  if (isComplete) return <GameComplete onRestart={handleRestart} />;
+  if (isComplete)
+    return (
+      <GameComplete onRestart={handleRestart} assignmentData={assignmentData} />
+    );
 
   return (
     <div
