@@ -74,7 +74,7 @@ const questionsConfig = [
     mood: "curious",
     conditional: { questionId: 7, answer: "Lainnya" },
     isOtherOption: true,
-    parentEntry: "entry.123821330",
+    parentEntry: "entry.11659136",
   },
   {
     id: 9,

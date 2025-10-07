@@ -73,8 +73,8 @@ const App = () => {
       if (entryId) {
         // Handle pertanyaan "Lainnya" dengan benar
         if (parseInt(qId) === 7) {
-          // Pertanyaan 7 adalah "other option" dari pertanyaan 6
-          // Kirim "__other_option__" untuk pertanyaan 6
+          // Pertanyaan 8 adalah "other option" dari pertanyaan 7
+          // Kirim "__other_option__" untuk pertanyaan 7
           formData.append("entry.11659136", "__other_option__");
           // Kirim nilai sebenarnya ke other_option_response
           formData.append("entry.11659136.other_option_response", answers[qId]);
