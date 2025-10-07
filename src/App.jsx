@@ -80,7 +80,7 @@ const App = () => {
           // Kirim "__other_option__" untuk pertanyaan 7
             if (otherOption){
               formData.append(googleFormMapping[7], "__other_option__");
-              formData.append(googleFormMapping[8], "otherOption");
+              formData.append(googleFormMapping[8], otherOption);
             }
         } else {
           // Jika jawabannya bukan "Lainnya" (misal: "BSD"), kirim seperti biasa.
