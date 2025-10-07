@@ -89,13 +89,13 @@ const App = () => {
       } 
       // Kasus 2: Abaikan pertanyaan text input "Lainnya" (id: 8)
       // karena sudah kita proses di atas sebagai bagian dari pertanyaan id: 7.
-      else if (numericQId !== 8) {
+      else if (parseInt(qId) !== 8) {
         // Kasus 3: Untuk semua pertanyaan lain, kirim seperti biasa.
         formData.append(entryId, answer);
       }
     }
   });
-  
+
     try {
       await fetch(googleFormURL, {
         method: "POST",
