@@ -76,7 +76,7 @@ const GameComplete = ({ onRestart, assignmentData }) => (
         <p className="text-base sm:text-lg text-gray-200 mb-6 sm:mb-8 leading-relaxed pixel-text">
           Terima kasih sudah mengisi form!
           <br />
-          See U at CG FUN 🛡️
+          Have Fun at CG FUN & GBU 😊
         </p>
 
         <div className="flex justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
