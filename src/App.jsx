@@ -228,8 +228,8 @@ const App = () => {
       <div className="max-w-6xl w-full relative z-10">
         {/* Judul */}
         <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-100 mb-2 sm:mb-4 pixel-text pixel-glow">
-            ✨ LIGHT UP ✨
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-100 mb-2 sm:mb-4 pixel-text pixel-glow">
+            ✨ Encounter The Light ✨
           </h1>
           <p className="text-gray-100 text-sm sm:text-lg font-medium pixel-text">
             CG FUN Team Leader Ivana
