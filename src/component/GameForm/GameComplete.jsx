@@ -29,7 +29,8 @@ const GameComplete = ({ onRestart, assignmentData }) => (
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-gray-400 to-gray-200 bg-clip-text text-transparent pixel-text">
-          Welcome Home <span className="text-white">🎉🎉🎉</span>
+          <span className="text-white">🎉</span>Welcome Home
+          <span className="text-white">🎉</span>
         </h1>
 
         {/* Info Kelompok Assignment */}
