@@ -41,7 +41,7 @@ const questionsConfig = [
     mood: "happy",
     conditional: { questionId: 4, answer: "Udah dong! 🎉" },
     validation: {
-      pattern: /^(CG\s\d+|[Cc][Oo][Aa][Cc][Hh])$/,
+      pattern: /^([Cc][Gg]\s\d+|[Cc][Oo][Aa][Cc][Hh])$/,
       message: "Format harus: 'CG (Nomor CG)' atau 'Coach' ya! 🏠",
     },
   },

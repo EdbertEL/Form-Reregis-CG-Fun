@@ -739,3 +739,360 @@ function quickTest() {
 
   Logger.log("\n✅ Quick test completed!");
 }
+
+/**
+ * 🗑️ CLEAR ALL ASSIGNMENTS - Hapus semua data assignment
+ *
+ * PERINGATAN: Fungsi ini akan menghapus SEMUA data assignment!
+ * Gunakan dengan hati-hati!
+ *
+ * CARA PAKAI:
+ * 1. Buka Apps Script editor
+ * 2. Pilih fungsi "clearAllAssignments" dari dropdown
+ * 3. Klik Run
+ * 4. Konfirmasi di log
+ *
+ * Fungsi ini akan:
+ * - Menghapus semua data (kecuali header)
+ * - Reset counter ke 0
+ * - Log jumlah data yang dihapus
+ */
+function clearAllAssignments() {
+  Logger.log("=== CLEAR ALL ASSIGNMENTS ===");
+  Logger.log("⚠️ WARNING: This will delete ALL assignment data!\n");
+
+  try {
+    const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const assignmentSheet = ss.getSheetByName(CONFIG.ASSIGNMENT_SHEET_NAME);
+
+    if (!assignmentSheet) {
+      Logger.log("❌ Sheet tidak ditemukan: " + CONFIG.ASSIGNMENT_SHEET_NAME);
+      Logger.log("Tidak ada data untuk dihapus.");
+      return;
+    }
+
+    const lastRow = assignmentSheet.getLastRow();
+
+    if (lastRow <= 1) {
+      Logger.log("✅ Sheet sudah kosong (hanya header).");
+      return;
+    }
+
+    // Hitung jumlah data yang akan dihapus
+    const dataCount = lastRow - 1;
+
+    Logger.log(`📊 Ditemukan ${dataCount} data assignment`);
+    Logger.log("🗑️ Menghapus data...");
+
+    // Hapus semua row kecuali header
+    assignmentSheet.deleteRows(2, dataCount);
+
+    Logger.log(`✅ Berhasil menghapus ${dataCount} data assignment`);
+    Logger.log("📋 Sheet sekarang hanya berisi header");
+    Logger.log("\n=== CLEAR COMPLETED ===");
+
+    return {
+      success: true,
+      deletedCount: dataCount,
+      message: `${dataCount} data berhasil dihapus`,
+    };
+  } catch (error) {
+    Logger.log("❌ Error saat clear assignments: " + error.toString());
+    Logger.log("Stack trace: " + error.stack);
+    throw error;
+  }
+}
+
+/**
+ * 🗑️ CLEAR TEST DATA - Hapus hanya data test
+ *
+ * Fungsi ini menghapus data yang mengandung kata "test" di nama atau email
+ * Lebih aman daripada clearAllAssignments karena hanya hapus data test
+ *
+ * CARA PAKAI:
+ * 1. Buka Apps Script editor
+ * 2. Pilih fungsi "clearTestData" dari dropdown
+ * 3. Klik Run
+ */
+function clearTestData() {
+  Logger.log("=== CLEAR TEST DATA ===");
+  Logger.log("🔍 Mencari dan menghapus data test...\n");
+
+  try {
+    const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const assignmentSheet = ss.getSheetByName(CONFIG.ASSIGNMENT_SHEET_NAME);
+
+    if (!assignmentSheet) {
+      Logger.log("❌ Sheet tidak ditemukan: " + CONFIG.ASSIGNMENT_SHEET_NAME);
+      return;
+    }
+
+    const lastRow = assignmentSheet.getLastRow();
+
+    if (lastRow <= 1) {
+      Logger.log("✅ Sheet kosong, tidak ada data test untuk dihapus.");
+      return;
+    }
+
+    // Ambil semua data
+    const data = assignmentSheet.getRange(2, 1, lastRow - 1, 13).getValues();
+
+    // Cari row yang mengandung "test" (case insensitive)
+    const rowsToDelete = [];
+    let deletedCount = 0;
+
+    // Loop dari belakang untuk menghindari masalah index saat delete
+    for (let i = data.length - 1; i >= 0; i--) {
+      const nama = String(data[i][1]).toLowerCase();
+      const email = String(data[i][3]).toLowerCase();
+
+      if (nama.includes("test") || email.includes("test")) {
+        const actualRowNumber = i + 2; // +2 karena array index 0 = row 2
+        rowsToDelete.push(actualRowNumber);
+        Logger.log(
+          `🗑️ Deleting: ${data[i][1]} (${data[i][3]}) - Row ${actualRowNumber}`
+        );
+      }
+    }
+
+    // Hapus rows (dari belakang ke depan)
+    for (let rowNum of rowsToDelete) {
+      assignmentSheet.deleteRow(rowNum);
+      deletedCount++;
+    }
+
+    if (deletedCount > 0) {
+      Logger.log(`\n✅ Berhasil menghapus ${deletedCount} data test`);
+    } else {
+      Logger.log("\n✅ Tidak ada data test yang ditemukan");
+    }
+
+    Logger.log("=== CLEAR TEST DATA COMPLETED ===");
+
+    return {
+      success: true,
+      deletedCount: deletedCount,
+      message: `${deletedCount} data test berhasil dihapus`,
+    };
+  } catch (error) {
+    Logger.log("❌ Error saat clear test data: " + error.toString());
+    Logger.log("Stack trace: " + error.stack);
+    throw error;
+  }
+}
+
+/**
+ * 📊 GET ASSIGNMENT STATISTICS - Lihat statistik assignment
+ *
+ * Fungsi ini menampilkan:
+ * - Total assignment
+ * - Distribusi per kelompok
+ * - Data test vs data real
+ *
+ * CARA PAKAI:
+ * 1. Buka Apps Script editor
+ * 2. Pilih fungsi "getAssignmentStatistics" dari dropdown
+ * 3. Klik Run
+ * 4. Lihat hasilnya di Log
+ */
+function getAssignmentStatistics() {
+  Logger.log("=== ASSIGNMENT STATISTICS ===\n");
+
+  try {
+    const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const assignmentSheet = ss.getSheetByName(CONFIG.ASSIGNMENT_SHEET_NAME);
+
+    if (!assignmentSheet) {
+      Logger.log("❌ Sheet tidak ditemukan: " + CONFIG.ASSIGNMENT_SHEET_NAME);
+      return;
+    }
+
+    const lastRow = assignmentSheet.getLastRow();
+
+    if (lastRow <= 1) {
+      Logger.log("📋 Sheet kosong (hanya header)");
+      Logger.log("Total assignment: 0");
+      return;
+    }
+
+    // Ambil semua data
+    const data = assignmentSheet.getRange(2, 1, lastRow - 1, 13).getValues();
+
+    // Hitung statistik
+    const totalAssignments = data.length;
+    const groupStats = {};
+    let testDataCount = 0;
+    let realDataCount = 0;
+
+    // Inisialisasi group stats
+    CONFIG.GROUPS.forEach((group) => {
+      groupStats[group.id] = {
+        name: group.name,
+        pic: group.pic,
+        count: 0,
+        members: [],
+      };
+    });
+
+    // Analisis data
+    data.forEach((row) => {
+      const nama = String(row[1]);
+      const email = String(row[3]).toLowerCase();
+      const groupId = row[9];
+
+      // Tambah ke group stats
+      if (groupStats[groupId]) {
+        groupStats[groupId].count++;
+        groupStats[groupId].members.push(nama);
+      }
+
+      // Hitung test vs real data
+      if (nama.toLowerCase().includes("test") || email.includes("test")) {
+        testDataCount++;
+      } else {
+        realDataCount++;
+      }
+    });
+
+    // Tampilkan hasil
+    Logger.log(`📊 TOTAL ASSIGNMENTS: ${totalAssignments}`);
+    Logger.log(`   - Real Data: ${realDataCount}`);
+    Logger.log(`   - Test Data: ${testDataCount}`);
+    Logger.log("");
+
+    Logger.log("📋 DISTRIBUSI PER KELOMPOK:");
+    CONFIG.GROUPS.forEach((group) => {
+      const stats = groupStats[group.id];
+      const percentage =
+        totalAssignments > 0
+          ? ((stats.count / totalAssignments) * 100).toFixed(1)
+          : 0;
+
+      Logger.log(
+        `   ${group.name} (${group.pic}): ${stats.count} orang (${percentage}%)`
+      );
+
+      // Tampilkan beberapa nama member (max 3)
+      if (stats.members.length > 0) {
+        const sampleMembers = stats.members.slice(0, 3).join(", ");
+        const moreText =
+          stats.members.length > 3
+            ? `, +${stats.members.length - 3} lainnya`
+            : "";
+        Logger.log(`      → ${sampleMembers}${moreText}`);
+      }
+    });
+
+    // Cek balance distribution
+    const counts = Object.values(groupStats).map((g) => g.count);
+    const maxCount = Math.max(...counts);
+    const minCount = Math.min(...counts);
+    const difference = maxCount - minCount;
+
+    Logger.log("");
+    Logger.log("⚖️ BALANCE CHECK:");
+    Logger.log(
+      `   Max: ${maxCount} | Min: ${minCount} | Difference: ${difference}`
+    );
+
+    if (difference <= 1) {
+      Logger.log("   ✅ Distribusi sangat seimbang!");
+    } else if (difference <= 2) {
+      Logger.log("   ✅ Distribusi cukup seimbang");
+    } else {
+      Logger.log("   ⚠️ Distribusi kurang seimbang");
+    }
+
+    Logger.log("\n=== STATISTICS COMPLETED ===");
+
+    return {
+      total: totalAssignments,
+      realData: realDataCount,
+      testData: testDataCount,
+      groupStats: groupStats,
+      balance: {
+        max: maxCount,
+        min: minCount,
+        difference: difference,
+      },
+    };
+  } catch (error) {
+    Logger.log("❌ Error saat get statistics: " + error.toString());
+    throw error;
+  }
+}
+
+/**
+ * 🔄 RESET SHEET - Reset sheet ke kondisi awal (kosong dengan header)
+ *
+ * Fungsi ini akan:
+ * 1. Hapus semua data
+ * 2. Pastikan header masih ada
+ * 3. Format ulang sheet
+ *
+ * CARA PAKAI:
+ * 1. Buka Apps Script editor
+ * 2. Pilih fungsi "resetSheet" dari dropdown
+ * 3. Klik Run
+ */
+function resetSheet() {
+  Logger.log("=== RESET SHEET ===");
+  Logger.log("🔄 Mereset sheet ke kondisi awal...\n");
+
+  try {
+    const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    let assignmentSheet = ss.getSheetByName(CONFIG.ASSIGNMENT_SHEET_NAME);
+
+    // Jika sheet tidak ada, buat baru
+    if (!assignmentSheet) {
+      Logger.log("📋 Sheet tidak ditemukan, membuat sheet baru...");
+      assignmentSheet = ss.insertSheet(CONFIG.ASSIGNMENT_SHEET_NAME);
+    } else {
+      // Clear semua data
+      Logger.log("🗑️ Menghapus semua data...");
+      assignmentSheet.clear();
+    }
+
+    // Setup header
+    Logger.log("📝 Membuat header...");
+    const headers = [
+      "Timestamp",
+      "Nama",
+      "No WA",
+      "Email",
+      "Join CG",
+      "CG Mana",
+      "Coach",
+      "Domisili",
+      "Kuliah Dimana",
+      "Kelompok ID",
+      "Nama Kelompok",
+      "PIC",
+      "Assigned At",
+    ];
+
+    assignmentSheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    assignmentSheet.getRange(1, 1, 1, headers.length).setFontWeight("bold");
+    assignmentSheet.getRange(1, 1, 1, headers.length).setBackground("#4285f4");
+    assignmentSheet.getRange(1, 1, 1, headers.length).setFontColor("#ffffff");
+    assignmentSheet.setFrozenRows(1);
+
+    // Auto resize columns
+    Logger.log("📐 Mengatur lebar kolom...");
+    for (let i = 1; i <= headers.length; i++) {
+      assignmentSheet.autoResizeColumn(i);
+    }
+
+    Logger.log("✅ Sheet berhasil direset!");
+    Logger.log("📋 Sheet sekarang kosong dengan header yang fresh");
+    Logger.log("\n=== RESET COMPLETED ===");
+
+    return {
+      success: true,
+      message: "Sheet berhasil direset",
+    };
+  } catch (error) {
+    Logger.log("❌ Error saat reset sheet: " + error.toString());
+    throw error;
+  }
+}
