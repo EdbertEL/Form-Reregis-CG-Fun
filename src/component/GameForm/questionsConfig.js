@@ -20,6 +20,10 @@ const questionsConfig = [
     type: "text",
     placeholder: "Contoh: encounterthelight@gmail.com",
     mood: "friendly",
+    validation: {
+      pattern: /^[^\s@]+@gmail\.com$/i,
+      message: "Email harus menggunakan @gmail.com ya! 📧",
+    },
   },
   {
     id: 4,
@@ -36,6 +40,10 @@ const questionsConfig = [
     placeholder: "Contoh: CG 101 / 'Coach' (untuk coach)",
     mood: "happy",
     conditional: { questionId: 4, answer: "Udah dong! 🎉" },
+    validation: {
+      pattern: /^(CG\s\d+|[Cc][Oo][Aa][Cc][Hh])$/,
+      message: "Format harus: 'CG (Nomor CG)' atau 'Coach' ya! 🏠",
+    },
   },
   {
     id: 6,
@@ -51,7 +59,6 @@ const questionsConfig = [
       "Coach Levi",
       "Coach Mike",
       "Coach Nicholas",
-      "Coach Shella",
       "Coach Vebry",
     ],
     mood: "curious",

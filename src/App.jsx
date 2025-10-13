@@ -27,6 +27,7 @@ const App = () => {
   const [visibleQuestions, setVisibleQuestions] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [assignmentData, setAssignmentData] = useState(null);
+  const [validationError, setValidationError] = useState("");
 
   const ASSIGNMENT_API_URL =
     import.meta.env.VITE_ASSIGNMENT_API_URL ||
@@ -49,14 +50,34 @@ const App = () => {
 
   const handleAnswer = (questionId, value) => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
+    // Clear validation error when user types
+    setValidationError("");
+  };
+
+  const validateAnswer = (question, answer) => {
+    if (!question.validation) return true;
+    
+    const isValid = question.validation.pattern.test(answer);
+    if (!isValid) {
+      setValidationError(question.validation.message);
+    }
+    return isValid;
   };
 
   const handleNext = () => {
     // Prevent multiple clicks
     if (isSubmitting) return;
 
+    const currentAnswer = answers[currentQ?.id];
+    
+    // Validate current answer if validation exists
+    if (currentQ?.validation && !validateAnswer(currentQ, currentAnswer)) {
+      return;
+    }
+
     if (currentQuestion < visibleQuestions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
+      setValidationError("");
     } else {
       handleSubmit();
     }
@@ -262,6 +283,15 @@ const App = () => {
                 value={answers[currentQ.id]}
                 onChange={handleAnswer}
               />
+            )}
+
+            {/* Error Message */}
+            {validationError && (
+              <div className="mt-4 p-3 bg-red-900/30 border-2 border-red-500 rounded-sm pixel-border">
+                <p className="text-red-300 text-sm pixel-text">
+                  ⚠️ {validationError}
+                </p>
+              </div>
             )}
 
             {/* Tombol navigasi */}

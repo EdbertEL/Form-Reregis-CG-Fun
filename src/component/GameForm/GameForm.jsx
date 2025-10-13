@@ -3,6 +3,7 @@ const GameForm = () => {
   const [answers, setAnswers] = useState({});
   const [isComplete, setIsComplete] = useState(false);
   const [visibleQuestions, setVisibleQuestions] = useState([]);
+  const [validationError, setValidationError] = useState("");
 
   useEffect(() => {
     const filtered = questionsConfig.filter((q) => {
@@ -19,11 +20,31 @@ const GameForm = () => {
 
   const handleAnswer = (questionId, value) => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
+    // Clear validation error when user types
+    setValidationError("");
+  };
+
+  const validateAnswer = (question, answer) => {
+    if (!question.validation) return true;
+    
+    const isValid = question.validation.pattern.test(answer);
+    if (!isValid) {
+      setValidationError(question.validation.message);
+    }
+    return isValid;
   };
 
   const handleNext = () => {
+    const currentAnswer = answers[currentQ.id];
+    
+    // Validate current answer if validation exists
+    if (currentQ.validation && !validateAnswer(currentQ, currentAnswer)) {
+      return;
+    }
+
     if (currentQuestion < visibleQuestions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
+      setValidationError("");
     } else {
       handleSubmit();
     }
