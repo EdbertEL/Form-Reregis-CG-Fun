@@ -50,7 +50,7 @@ const questionsConfig = [
     question: "Siapa Coach/Penggembalaan kamu? 😊",
     type: "choice",
     options: [
-      "Coach Nael",
+      "Coach Nael & Shella",
       "Coach Alvin",
       "Coach Debora",
       "Coach Erick",
