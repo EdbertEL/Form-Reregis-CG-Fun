@@ -262,7 +262,7 @@ const App = () => {
             ✨ Encounter The Light ✨
           </h1>
           <p className="text-gray-100 text-sm sm:text-lg font-medium pixel-text">
-            CG FUN Team Leader Ivana
+            CG FUN GS-BSD Team Leader Ivana
           </p>
         </div>
 

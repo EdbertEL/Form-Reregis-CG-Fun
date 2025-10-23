@@ -16,7 +16,7 @@ const questionsConfig = [
   },
   {
     id: 3,
-    question: "Boleh minta email kamu? (Buat notif kelompok otomatis 📧✨)",
+    question: "Boleh minta email kamu? (Buat pembagian kelompok otomatis 📧✨)",
     type: "text",
     placeholder: "Contoh: encounterthelight@gmail.com",
     mood: "friendly",
