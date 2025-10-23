@@ -29,6 +29,19 @@ const App = () => {
   const [assignmentData, setAssignmentData] = useState(null);
   const [validationError, setValidationError] = useState("");
 
+  // Helper: Fetch with retry
+  const fetchWithRetry = async (url, options, retries = 2) => {
+    for (let i = 0; i <= retries; i++) {
+      try {
+        return await fetch(url, options);
+      } catch (error) {
+        if (i === retries) throw error;
+        console.log(`Retry attempt ${i + 1}/${retries}...`);
+        await new Promise((r) => setTimeout(r, 1000)); // Wait 1s before retry
+      }
+    }
+  };
+
   const ASSIGNMENT_API_URL =
     import.meta.env.VITE_ASSIGNMENT_API_URL ||
     "https://script.google.com/macros/s/AKfycbxZVwRCsshJVzEKM4rfoKnSJG5bLFDWtbrSowiCGv33UBG4jl-mPvqm0YtsThKmzNX-FA/exec";
@@ -150,15 +163,23 @@ const App = () => {
       const queryParams = new URLSearchParams(assignmentPayload).toString();
       const apiUrlWithParams = `${ASSIGNMENT_API_URL}?${queryParams}`;
 
-      // OPTIMIZED: Kirim assignment API dan Google Form secara PARALLEL
-      // untuk mempercepat proses (tidak menunggu satu sama lain)
+      // Show completion immediately with loading state
+      setAssignmentData({
+        groupName: "⏳ Memproses...",
+        pic: "Mohon tunggu",
+        nama: assignmentPayload.nama,
+        isLoading: true,
+      });
+      setIsComplete(true);
+
+      // PARALLEL: Google Form + Assignment API
       const [assignmentResponse] = await Promise.allSettled([
-        // Assignment API dengan timeout 10 detik
-        fetch(apiUrlWithParams, {
+        // Assignment API dengan retry logic
+        fetchWithRetry(apiUrlWithParams, {
           method: "GET",
-          signal: AbortSignal.timeout(10000), // 10 second timeout
+          signal: AbortSignal.timeout(25000), // 25 second timeout
         }),
-        // Google Form submission (no-cors, tidak perlu tunggu response)
+        // Google Form submission (no-cors)
         fetch(googleFormURL, {
           method: "POST",
           mode: "no-cors",
@@ -166,49 +187,42 @@ const App = () => {
         }),
       ]);
 
-      console.log("Assignment response status:", assignmentResponse.status);
+      console.log("Assignment response:", assignmentResponse);
 
-      // Handle assignment result
+      // Update assignment result after processing
       if (assignmentResponse.status === "fulfilled") {
-        const assignmentResult = await assignmentResponse.value.json();
-        console.log("Assignment result:", assignmentResult);
+        try {
+          const assignmentResult = await assignmentResponse.value.json();
+          console.log("Assignment result:", assignmentResult);
 
-        if (assignmentResult.success) {
-          // Simpan data assignment untuk ditampilkan di GameComplete
+          if (assignmentResult.success) {
+            setAssignmentData({
+              groupName: assignmentResult.assignment.groupName,
+              pic: assignmentResult.assignment.pic,
+              nama: assignmentPayload.nama,
+              isLoading: false,
+            });
+          } else {
+            throw new Error(assignmentResult.error || "Assignment failed");
+          }
+        } catch (jsonError) {
+          console.error("Error parsing response:", jsonError);
           setAssignmentData({
-            groupName: assignmentResult.assignment.groupName,
-            pic: assignmentResult.assignment.pic,
+            groupName: "Cek Email Kamu 📧",
+            pic: "Info kelompok dikirim via email",
             nama: assignmentPayload.nama,
+            isLoading: false,
           });
-          setIsComplete(true);
-        } else {
-          // Handle assignment error but still show completion
-          console.error("Assignment failed:", assignmentResult.error);
-          alert(
-            "Form berhasil dikirim, tetapi terjadi kesalahan saat assign kelompok. Tim kami akan memproses secara manual."
-          );
-          setAssignmentData({
-            groupName: "Menunggu Assignment",
-            pic: "Tim Admin",
-            nama: assignmentPayload.nama,
-          });
-          setIsComplete(true);
         }
       } else {
-        // Assignment API failed or timed out
-        console.error("Assignment request failed:", assignmentResponse.reason);
-
-        // Still show completion with fallback
+        // Timeout or network error
+        console.error("Assignment failed:", assignmentResponse.reason);
         setAssignmentData({
-          groupName: "Menunggu Assignment",
-          pic: "Tim Admin",
+          groupName: "Cek Email Kamu 📧",
+          pic: "Info kelompok dikirim via email",
           nama: assignmentPayload.nama,
+          isLoading: false,
         });
-        setIsComplete(true);
-
-        alert(
-          "Form berhasil dikirim! Assignment kelompok sedang diproses. Cek email kamu untuk info kelompok."
-        );
       }
     } catch (err) {
       console.error("Error submitting form:", err);
